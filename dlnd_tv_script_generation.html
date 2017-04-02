@@ -12438,13 +12438,15 @@ Default GPU Device: /gpu:0
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Implement Function</span>
     
-    <span class="n">embed_dim</span> <span class="o">=</span> <span class="mi">300</span>
+    <span class="c1"># relating the embedding dimension to the RNN size </span>
+    <span class="n">embed_dim</span> <span class="o">=</span> <span class="n">rnn_size</span>
     
     <span class="n">input_data_embedded</span> <span class="o">=</span> <span class="n">get_embed</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
     
     <span class="n">outputs</span><span class="p">,</span> <span class="n">final_state</span> <span class="o">=</span> <span class="n">build_rnn</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">input_data_embedded</span><span class="p">)</span>
     
-    <span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">fully_connected</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="n">activation_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># added weights initializer </span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">fully_connected</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="n">activation_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weights_initializer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal_initializer</span><span class="p">(</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
     
     <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">final_state</span>
 
@@ -12725,30 +12727,30 @@ Default GPU Device: /gpu:0
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch   0 Batch    0/8   train_loss = 8.822
-Epoch   6 Batch    2/8   train_loss = 3.867
-Epoch  12 Batch    4/8   train_loss = 2.623
-Epoch  18 Batch    6/8   train_loss = 1.910
-Epoch  25 Batch    0/8   train_loss = 1.548
-Epoch  31 Batch    2/8   train_loss = 1.116
-Epoch  37 Batch    4/8   train_loss = 0.926
-Epoch  43 Batch    6/8   train_loss = 0.749
-Epoch  50 Batch    0/8   train_loss = 0.696
-Epoch  56 Batch    2/8   train_loss = 0.506
-Epoch  62 Batch    4/8   train_loss = 0.454
-Epoch  68 Batch    6/8   train_loss = 0.382
-Epoch  75 Batch    0/8   train_loss = 0.376
-Epoch  81 Batch    2/8   train_loss = 0.347
-Epoch  87 Batch    4/8   train_loss = 0.262
-Epoch  93 Batch    6/8   train_loss = 0.239
-Epoch 100 Batch    0/8   train_loss = 0.247
-Epoch 106 Batch    2/8   train_loss = 0.225
-Epoch 112 Batch    4/8   train_loss = 0.207
-Epoch 118 Batch    6/8   train_loss = 0.210
-Epoch 125 Batch    0/8   train_loss = 0.225
-Epoch 131 Batch    2/8   train_loss = 0.210
-Epoch 137 Batch    4/8   train_loss = 0.196
-Epoch 143 Batch    6/8   train_loss = 0.203
+<pre>Epoch   0 Batch    0/8   train_loss = 8.845
+Epoch   6 Batch    2/8   train_loss = 3.541
+Epoch  12 Batch    4/8   train_loss = 2.205
+Epoch  18 Batch    6/8   train_loss = 1.489
+Epoch  25 Batch    0/8   train_loss = 1.061
+Epoch  31 Batch    2/8   train_loss = 0.799
+Epoch  37 Batch    4/8   train_loss = 0.527
+Epoch  43 Batch    6/8   train_loss = 0.515
+Epoch  50 Batch    0/8   train_loss = 0.346
+Epoch  56 Batch    2/8   train_loss = 0.286
+Epoch  62 Batch    4/8   train_loss = 0.233
+Epoch  68 Batch    6/8   train_loss = 0.223
+Epoch  75 Batch    0/8   train_loss = 0.232
+Epoch  81 Batch    2/8   train_loss = 0.215
+Epoch  87 Batch    4/8   train_loss = 0.200
+Epoch  93 Batch    6/8   train_loss = 0.206
+Epoch 100 Batch    0/8   train_loss = 0.220
+Epoch 106 Batch    2/8   train_loss = 0.207
+Epoch 112 Batch    4/8   train_loss = 0.194
+Epoch 118 Batch    6/8   train_loss = 0.201
+Epoch 125 Batch    0/8   train_loss = 0.216
+Epoch 131 Batch    2/8   train_loss = 0.204
+Epoch 137 Batch    4/8   train_loss = 0.191
+Epoch 143 Batch    6/8   train_loss = 0.198
 Model Trained and Saved
 </pre>
 </div>
@@ -12892,7 +12894,7 @@ Model Trained and Saved
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pick_word</span><span class="p">(</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">int_to_vocab</span><span class="p">):</span>
@@ -12950,7 +12952,7 @@ Model Trained and Saved
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gen_length</span> <span class="o">=</span> <span class="mi">200</span>
@@ -13011,22 +13013,22 @@ Model Trained and Saved
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>moe_szyslak: homer, can you say the alphabet backwards?
-homer_simpson:(beligerent) oh, you guys aren&#39;t from the boy.
-barney_gumble: thank you!
-homer_simpson: oh, it&#39;s ringing!
-lenny_leonard:(louder) omigod, omigod, omigod!
-bart_simpson:(amazed) david byrne?! nothin&#39; you&#39;ve got to keep it in the drink?
-carl_carlson: not to mention drivin&#39; to.
-moe_szyslak: four toys and so, i&#39;m surprised you&#39;re lucky i should be in here drinkin&#39; beer.
-moe_szyslak: sorry, homer.
-homer_simpson: you dirty teen.
-moe_szyslak:(laughs, patting out flames) i&#39;m burnin&#39; up, here it isn&#39;t.(flips through the book) no, i just need to learn / &#39;cause we&#39;re living in a world of fools.
-moe_szyslak: yeah, that&#39;s probably a feeling friends like this.
-kirk_van_houten: starla&#39;s a minute. i&#39;m a real expert.
-moe_szyslak: what is it?
-homer_simpson:(matter-of-fact) i thought you said we are right now. i&#39;m an ironed at is it?
-bart_simpson:(into phone)
+<pre>moe_szyslak: no.
+homer_simpson: what if i just whisper it?
+moe_szyslak: no, no, ah, here, no. not tonight. i just sat there playin&#39;..
+moe_szyslak: moe_szyslak: i am sick. you&#39;re late for your drunkening.
+homer_simpson: no. from now on the...&#34;
+moe_szyslak: okay you filthy booze-bags, and i was my last date with no!
+lenny_leonard: it&#39;s official. smithers!
+moe_szyslak: moe&#39;s tavern, eh? first name, moe?
+moe_szyslak:(sobs) oh, what&#39;ll it you take it back.
+moe_szyslak: well, somebody&#39;s a grumpy gus, i should be back in my way.
+moe_szyslak: hey, homer.
+homer_simpson:(happy to see him) hey, fat tony!
+moe_szyslak:(sotto, looking at homer) eh, might as well close the wrong, but.
+homer_simpson:(meaningful) don&#39;t worry. and that was with the wrong, homer.
+homer_simpson:(indignant) so you guys have any luck finding a new ugly?
+moe_szyslak: hey,
 </pre>
 </div>
 </div>
